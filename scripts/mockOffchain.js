@@ -1,7 +1,14 @@
+// to run this: hh run scripts/mockOffchain.js --network localhost
+// make sure that localhost is configured in hardhat.config.js:
+// localhost: {
+// 	chainId: 31337,
+// 	blockConfirmations: 1,
+// },
+
 const { ethers, network } = require("hardhat")
 
 async function mockKeepers() {
-	const raffle = await ethers.getContract("Raffle")
+	const raffle = await ethers.getContract("Raffle_2")
 	const checkData = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(""))
 	const { upkeepNeeded } = await raffle.callStatic.checkUpkeep(checkData)
 	if (upkeepNeeded) {
@@ -9,6 +16,7 @@ async function mockKeepers() {
 		const txReceipt = await tx.wait(1)
 		const requestId = txReceipt.events[1].args.requestId
 		console.log(`Performed upkeep with RequestId: ${requestId}`)
+		console.log(`chain ID is: ${network.config.chainId}`)
 		if (network.config.chainId == 31337) {
 			await mockVrf(requestId, raffle)
 		}

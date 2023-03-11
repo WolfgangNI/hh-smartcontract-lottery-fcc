@@ -24,6 +24,10 @@ module.exports = {
 			chainId: 5,
 			saveDeployments: true,
 		},
+		localhost: {
+			chainId: 31337,
+			blockConfirmations: 1,
+		},
 	},
 	gasReporter: {
 		enabled: true,
